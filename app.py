@@ -1,6 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, redirect, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 import datetime
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:wube@localhost:5432/todo'
@@ -18,13 +19,26 @@ class Todo(db.Model):
 
     def __repr__(self):
         return f"""<Todos>
-                id:{Todo.id} 
-                content:{Todo.content},
-                completed: {Todo.completed} """
+                id:{self.id} 
+                content:{self.content},
+                completed: {self.completed} 
+                date created: {self.date_created}"""
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def index():
-    return render_template("index.html")
+    if request.method == 'POST':
+        task_content = request.form['content']
+        new_task = Todo(content=task_content)
+        try:
+            db.session.add(new_task)
+            db.session.commit()
+            return redirect('/')
+        except:
+            return "there was an error creating the task"    
+    else:
+        tasks = Todo.query.order_by('date_created').all()
+        return render_template("index.html", tasks=tasks)
+
 
 
 

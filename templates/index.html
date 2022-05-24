@@ -1,11 +1,36 @@
 {% extends 'base.html' %}
 
 {% block head %} 
-<h1>Template</h1>
+<title>Todo</title>
 {% endblock %}
 
 
 
 {% block body %} 
-
+<div>
+    <h1>Todo list</h1>
+    <table>
+        <tr>
+            <th>Task</th>
+            <th>Added</th>
+            <th>Actions</th>
+        </tr>
+        {% for task in tasks %}
+            <tr>
+                <td>{{ task.content }}</td>
+                <td>{{ task.date_created.date() }}</td>
+                <td>
+                    <a href="">Delete</a>
+                    <br>
+                    <a href="">Update</a>
+                </td>
+            </tr>
+        {% endfor %}    
+        
+    </table>
+    <form action="/" method="POST">
+        <input type="text" name="content" placeholder="add a new task here" id="content" />
+        <input type="submit" value="add a task" id="submit">
+    </form>
+</div>
 {% endblock %}
