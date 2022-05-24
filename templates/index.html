@@ -9,7 +9,11 @@
 {% block body %} 
 <div>
     <h1>Todo list</h1>
+    {% if tasks|length < 1%}
+        <h4>There is no any todo. Add one from below!</h4>
+    {% else %}
     <table>
+        
         <tr>
             <th>Task</th>
             <th>Added</th>
@@ -20,14 +24,15 @@
                 <td>{{ task.content }}</td>
                 <td>{{ task.date_created.date() }}</td>
                 <td>
-                    <a href="">Delete</a>
+                    <a href="/delete/{{ task.id }}">Delete</a>
                     <br>
-                    <a href="">Update</a>
+                    <a href="/update/{{ task.id }}">Update</a>
                 </td>
             </tr>
         {% endfor %}    
         
     </table>
+    {% endif %}  
     <form action="/" method="POST">
         <input type="text" name="content" placeholder="add a new task here" id="content" />
         <input type="submit" value="add a task" id="submit">
